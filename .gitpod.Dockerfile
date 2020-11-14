@@ -19,4 +19,5 @@ RUN sudo apt-get update \
  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
 
 RUN echo '完成！'
+RUN echo hogehoge >> temp.txt
 
