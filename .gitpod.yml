@@ -10,3 +10,5 @@ ports:
 tasks:
   - init: echo 'init script' # runs during prebuild
     command: echo 'start script'
+      pip install --upgrade pip
+      pip install requests-html
