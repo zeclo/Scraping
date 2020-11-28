@@ -19,4 +19,9 @@ RUN sudo apt-get update \
  && pip install --upgrade pip \
  && pip install requests-html
 
+#for playwright
+RUN pip install playwright
+RUN python -m playwright install
+RUN pip install pytest-playwright
+
 
