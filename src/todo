@@ -1,0 +1,71 @@
+このGitpodの目的
+・Gitpodの基礎的な設定、Tipsの理解と説明
+・投資で使うスクレイピングライブラリの準備
+・アフィリエイト向けサイト分析ライブラリの準備
+
+
+自分へメッセージ
+　・アフィリサイト構築で苦手なことを99%自動化する。後は時間を最大限に活用する。
+　・アフィリ構築の工程 
+        キーワード分析
+        キーワードに関連したキーワード分析
+        キーワードで検索した結果(サイト)を解析
+
+
+具体的なTODO
+[アフィリエイト自動化]
+・ラッコキーワードのリストを引っ張ってくること
+・92racco.pyでplaywright.sysc_apiを試す
+・キーワードプランナーを使ってみる
+・システム開発の悩みを書いてみる
+
+★Googleにキーワードを入力してその結果(URL)をリスト化する
+    h3タグのリスト化で結果が出そう。表示件数を30件にするのは難しいか
+★指定URLから、タイトルタグ、h1～h5タグの文言を抽出する
+
+・BeautifulSoup経由だと値が取得でいないものがある？(サイトの情報が全て開く前のHTMLが表示される)
+　　→ testtest.pyで試してる。どうやら、Dockerfileにsuto apt-getを実施する必要があるみたい。
+python -m pip install --upgrade pip　　
+python -m pip install requests-html
+　　
+・MSが出したWeb操作フレームワークの導入
+https://qiita.com/yaboxi_/items/266b5ce18e57aa1faca1
+pip install playwright
+python -m playwright install
+pip install pytest-playwright
+
+
+TIPS
+    ・pythonの実行 ex python test4racco.py
+
+
+
+
+
+
+
+
+▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼
+Function getKabumapHTML(targetStockCode As String) As String
+    Dim objIE As InternetExplorer 'IEオブジェクトを準備    Set objIE = CreateObject("Internetexplorer.Application") '新しいIEオブジェクトを作成してセット        objIE.Visible = False 'IEを表示        objIE.navigate "https://jp.kabumap.com/servlets/kabumap/Action?SRC=basic/top/base&codetext=" + targetStockCode 'IEでURLを開く        Call WaitResponse(objIE) '読み込み待ち         Dim htmlDoc As HTMLDocument 'HTMLドキュメントオブジェクトを準備    Set htmlDoc = objIE.document 'objIEで読み込まれているHTMLドキュメントをセット    '---------------------------------    '  footerの文字を取得    '  今回はクラスを指定(getElementsByClassNameで)してタグを特定します    '  (0)は「class="license"」がついてるタグの一つ目を指します    '---------------------------------    'MsgBox htmlDoc.getElementsByClassName("license")(0).innerHTML        Dim tempDoc As String    tempDoc = htmlDoc.getElementsByTagName("BODY")(0).innerHTML()    'MsgBox tempDoc
+        getKabumapHTML = tempDoc        objIE.Quit    End Function
+
+
+
+Function getKabumapHTML(targetStockCode As String) As String
+    Dim objIE As InternetExplorer 'IEオブジェクトを準備
+        Set objIE = CreateObject("Internetexplorer.Application") '新しいIEオブジェクトを作成してセット
+                objIE.Visible = False 'IEを表示
+                        objIE.navigate "https://jp.kabumap.com/servlets/kabumap/Action?SRC=basic/top/base&codetext=" + targetStockCode 'IEでURLを開く
+                                Call WaitResponse(objIE) '読み込み待ち
+                                         Dim htmlDoc As HTMLDocument 'HTMLドキュメントオブジェクトを準備
+                                             Set htmlDoc = objIE.document 'objIEで読み込まれているHTMLドキュメントをセット
+                                                 '---------------------------------    '  footerの文字を取得
+                                                     '  今回はクラスを指定(getElementsByClassNameで)してタグを特定します
+                                                         '  (0)は「class="license"」がついてるタグの一つ目を指します
+                                                             '---------------------------------
+                                                                 'MsgBox htmlDoc.getElementsByClassName("license")(0).innerHTML
+                Dim tempDoc As String    tempDoc = htmlDoc.getElementsByTagName("BODY")(0).innerHTML()
+                    'MsgBox tempDoc
+                            getKabumapHTML = tempDoc
+        objIE.Quit    End Function
