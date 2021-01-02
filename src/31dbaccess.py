@@ -5,7 +5,7 @@ import sqlite3
 # データベースファイルのパス
 dbpath = 'db/test.db'
  
-# データベース接続とカーソル生成
+# データベース接続とカーソル生成(データベースファイルがない場合は指定ファイル名で自動作成)
 connection = sqlite3.connect(dbpath)
 # 自動コミットにする場合は下記を指定（コメントアウトを解除のこと）
 # connection.isolation_level = None

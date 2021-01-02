@@ -37,6 +37,7 @@ pip install pytest-playwright
 
 TIPS
     ・pythonの実行 ex python test4racco.py
+    ・pytestの実行 ex pytest src/yahoooF.py
 
 
 
