@@ -26,8 +26,8 @@ RUN pip install pytest-playwright
 
 #for matplotlibグラフ作成
 RUN pip install matplotlib
-#for matplotlibグラフ作成(日本語フォント利用)
-RUN sudo apt install -y fonts-ipafont
-RUN fc-cache -fv
+#for matplotlibグラフ作成(日本語フォント利用)  ★動作検証中(今の命令だと起動時にエラー)
+#RUN sudo apt install -y fonts-ipafont
+#RUN fc-cache -fv
 
 
