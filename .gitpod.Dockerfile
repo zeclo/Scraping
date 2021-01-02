@@ -24,4 +24,7 @@ RUN pip install playwright
 RUN python -m playwright install
 RUN pip install pytest-playwright
 
+#for matplotlibグラフ作成
+RUN pip install matplotlib
+
 

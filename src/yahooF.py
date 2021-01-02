@@ -17,7 +17,7 @@ class TestPlanisphere:
         global pageCount
 
         while hasBodyTR == True:
-            url = 'https://info.finance.yahoo.co.jp/history/?code=' + str(stockCode) +'&sy=2020&sm=10&sd=5&ey=2020&em=12&ed=3&tm=d&p=' + str(pageCount)
+            url = 'https://info.finance.yahoo.co.jp/history/?code=' + str(stockCode) +'&sy=2020&sm=1&sd=1&ey=2020&em=12&ed=31&tm=d&p=' + str(pageCount)
             writeLOG(url)
             page.goto(url)
             page.waitForLoadState("networkidle")
