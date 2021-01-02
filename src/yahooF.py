@@ -85,7 +85,6 @@ class TestPlanisphere:
         connection = sqlite3.connect(dbpath)
         cursor = connection.cursor()
         cursor.execute('SELECT DISTINCT code ' +
-        #'code, name' +
         'FROM base  ')
 
         for row in cursor:
@@ -94,16 +93,6 @@ class TestPlanisphere:
         # 接続を閉じる
         connection.close()
         
-        
-        
-        
-        
-        
-        
-        
-        
-        #self.getPriceData(page, '2702')
-        #self.getPriceData(page, '7602')
         page.close()
 
     
