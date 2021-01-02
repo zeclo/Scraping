@@ -20,13 +20,14 @@ cursor = connection.cursor()
  
 # エラー処理（例外処理）
 try:
-    # CREATE
-    cursor.execute("DROP TABLE IF EXISTS Price")
-    cursor.execute("CREATE TABLE IF NOT EXISTS Price (Code TEXT, Date DATETIME, Start INTEGER, High INTEGER, Low INTEGER, End INTEGER, Volume INTEGER)")
+    if False:
+        # CREATE
+        cursor.execute("DROP TABLE IF EXISTS Price")
+        cursor.execute("CREATE TABLE IF NOT EXISTS Price (Code TEXT, Date DATETIME, Start INTEGER, High INTEGER, Low INTEGER, End INTEGER, Volume INTEGER)")
 
     for row in l:
         cursor.execute("INSERT INTO Price VALUES ('" + row[0] + "','" + row[1] + "'," + row[2] + "," + row[3] + "," + row[4] + "," + row[5] + "," + row[6] + ")")
-    
+        
     
     # INSERT
     #cursor.execute("INSERT INTO sample VALUES (1, '佐藤')")
@@ -68,7 +69,7 @@ cursor.execute('SELECT p.code' +
 'FROM Price p ' +
 'INNER JOIN (SELECT code,max(high) as ''yHigh'',min(low) as ''yLow'' FROM Price WHERE code = ''7602'' AND Date BETWEEN ''20200101'' AND ''20201231'' GROUP BY code) yp ' +
 '   ON p.code = yp.code ' +
-'WHERE p.code = ''7602''')
+'WHERE p.code = ''7602'' ORDER BY p.date DESC ')
 
 # 中身を全て取得するfetchall()を使って、printする。
 print(cursor.fetchall())

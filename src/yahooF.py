@@ -1,20 +1,20 @@
 import csv
 from playwright.sync_api import Page
 
+import sqlite3
+
 import os
 import urllib.parse #エンコード処理
 import datetime
 
-
-pageCount = 1
-hasBodyTR = True
-stockCode = 7602
-
+csvOutputBasePath = "output/csv_"
+htmlOutputBasePath = "output/html_"
+logFullPath = "Log.log"
 
 class TestPlanisphere:
-    def test_reserve_otoku(self, page: Page):
-        global hasBodyTR
-        global pageCount
+    def getPriceData(self, page, stockCode:str):
+        hasBodyTR = True
+        pageCount = 1
 
         while hasBodyTR == True:
             url = 'https://info.finance.yahoo.co.jp/history/?code=' + str(stockCode) +'&sy=2020&sm=1&sd=1&ey=2020&em=12&ed=31&tm=d&p=' + str(pageCount)
@@ -27,16 +27,14 @@ class TestPlanisphere:
 
             keywordElements = page.querySelectorAll('.boardFin' + '.yjSt' + '.marB6'); #複数クラスのAND条件
     
-            path = 'YahooList.txt'
-            bodyCount = 0
-            f = open(path, 'a')
+            f = open(csvOutputBasePath + stockCode + ".csv", 'a')
             for item in keywordElements:
                 trs = item.querySelectorAll('tr')
                 #writeLOG('TRの件数' + str(len(trs)))
                 if len(trs) == 1:
                     hasBodyTR = False
                 for tr in trs:
-                    if '日付' not in tr.innerHTML(): #テーブルヘッダー行は書き込みスキップ
+                    if '日付' not in tr.innerHTML(): #テーブルヘッダー行は書き込みをスキップ
                         tds = tr.querySelectorAll('td')
                         tdCount = 0
                         date = ''
@@ -49,9 +47,6 @@ class TestPlanisphere:
                         for td in tds:
                             if tdCount == 0:
                                 #日付
-                                #writeLOG(str(td.innerHTML()))
-                                #date = int(datetime.datetime.strptime(str(td.innerText()).replace('年', '-').replace('月', '-').replace('日', ''), '%Y-%m-%d'))
-                            
                                 date = datetime.datetime.strptime(str(td.innerText()), '%Y年%m月%d日')
                             if tdCount == 1:
                                 #始め
@@ -71,23 +66,48 @@ class TestPlanisphere:
                             tdCount = tdCount + 1 
                         #レコード記述
                         f.write(str(stockCode) + ',' + date.strftime('%Y%m%d') + ',' + start + ',' + high + ',' + low + ',' + end + ',' + volume + "\n")
-
-                        
-                        
-                bodyCount = bodyCount + 1
             f.close()
             
             pageCount = pageCount + 1
 
-            path = 'YahooListRowData.txt'
-            f = open(path, 'a')
-            f.write(html)  
-            f.close()
+            #f = open(htmlOutputBasePath + stockCode + ".txt", 'a')
+            #f.write(html)  
+            #f.close()
 
+    def test_reserve_otoku(self, page: Page):
+        global stockCode
+        #self.getPriceData(page, stockCode)
+        
+        # データベースファイルのパス
+        dbpath = 'db/kabu.db'
+        
+        # データベース接続とカーソル生成(データベースファイルがない場合は指定ファイル名で自動作成)
+        connection = sqlite3.connect(dbpath)
+        cursor = connection.cursor()
+        cursor.execute('SELECT DISTINCT code ' +
+        #'code, name' +
+        'FROM base  ')
+
+        for row in cursor:
+            self.getPriceData(page, row[0])
+
+        # 接続を閉じる
+        connection.close()
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        #self.getPriceData(page, '2702')
+        #self.getPriceData(page, '7602')
         page.close()
+
     
 def writeLOG(sentence):
-    path = 'Log.log'
-    f = open(path, 'a')
+    f = open(logFullPath, 'a')
     f.write(sentence + '\n')  
     f.close()
