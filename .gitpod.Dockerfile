@@ -31,6 +31,7 @@ RUN pip install matplotlib
 #RUN fc-cache -fv
 RUN cd /usr/share/fonts/truetype/
 RUN sudo wget https://moji.or.jp/wp-content/ipafont/IPAexfont/IPAexfont00401.zip
+RUN suto unzip IPAexfont00401
 RUN sudo fc-cache -fv
 
 
