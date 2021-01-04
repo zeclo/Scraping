@@ -29,5 +29,8 @@ RUN pip install matplotlib
 #for matplotlibグラフ作成(日本語フォント利用)  ★動作検証中(今の命令だと起動時にエラー)
 #RUN sudo apt install -y fonts-ipafont
 #RUN fc-cache -fv
+RUN sudo cd /usr/share/fonts/truetype/
+RUN sudo wget https://moji.or.jp/wp-content/ipafont/IPAexfont/IPAexfont00401.zip
+RUN sudo fc-cache -fv
 
 
