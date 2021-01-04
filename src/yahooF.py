@@ -7,6 +7,10 @@ import os
 import urllib.parse #エンコード処理
 import datetime
 
+##########################################################################
+#　処理概要：DB.baseから銘柄一覧を取得しYahooファイナンスの株価を取得(CSV形式保存)
+##########################################################################
+
 csvOutputBasePath = "output/csv_"
 htmlOutputBasePath = "output/html_"
 logFullPath = "Log.log"
