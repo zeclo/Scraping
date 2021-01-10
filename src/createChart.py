@@ -14,7 +14,7 @@ dbpath = 'db/kabu.db'
 pngFullPath = "output/chart_"
 
 
-def createPngfile(stockCode:str):
+def createPngfile(stockCode:str, stockName:str):
     # データベース接続とカーソル生成(データベースファイルがない場合は指定ファイル名で自動作成)
     connection = sqlite3.connect(dbpath)
     cursor = connection.cursor()
@@ -37,10 +37,13 @@ def createPngfile(stockCode:str):
     #散布図描画init処理
     fig = plt.figure()
     ax = fig.add_subplot(111, xlabel='x上昇率', ylabel='y相対株価')
+    #散布図にタイトルを設定
+    ax.set_title("" + stockCode +": "+ stockName, loc='center')
 
     nextStart = 1
     nextHigh = 1
     breakCounter = 0
+    protCounter = 0
     for row in cursor:
         #print(str(row[0]) + "," + str(row[1]))
         if nextStart == 1:
@@ -58,6 +61,7 @@ def createPngfile(stockCode:str):
         nextStart = row[3]
         nextHigh = row[4]
         protClolr = 'blue'
+        
         if x > 5:
             #print(breakCounter)
             if breakCounter > 10:
@@ -78,11 +82,15 @@ def createPngfile(stockCode:str):
                 protClolr = 'red'
             breakCounter = 0
         
-        if protClolr != 'blue':
-            ax.scatter(x, y,s=50, c=protClolr)
+        if protCounter == 0:
+            ax.scatter(x, y,s=100, c='red', marker='*')
         else:
-            ax.scatter(x, y, s=10, c=protClolr)
+            if protClolr != 'blue':
+                ax.scatter(x, y,s=50, c=protClolr)
+            else:
+                ax.scatter(x, y, s=10, c=protClolr)
         breakCounter = breakCounter + 1
+        protCounter = protCounter + 1
 
     # 接続を閉じる
     connection.close()
@@ -90,17 +98,18 @@ def createPngfile(stockCode:str):
     fig.savefig(pngFullPath + stockCode + ".png")
     #plt.show()
     #print(mlt.get_cachedir())
+    plt.close()
 
 
 
 # データベース接続とカーソル生成(データベースファイルがない場合は指定ファイル名で自動作成)
 connection2 = sqlite3.connect(dbpath)
 cursor2 = connection2.cursor()
-cursor2.execute('SELECT DISTINCT code ' +
+cursor2.execute('SELECT DISTINCT code, name ' +
 'FROM base  ')
 
 for row in cursor2:
-    createPngfile(row[0])
+    createPngfile(row[0], row[1])
 
 # 接続を閉じる
 connection2.close()

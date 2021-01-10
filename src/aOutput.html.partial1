@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue TEST</title>
+<!-- Vue.js を読み込む -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-clipboard2@0.3.1/dist/vue-clipboard.min.js"></script>
+<style type="text/css">
+    <!--
+        .site-header{
+            position: fixed;
+            background: blue;
+            width: 100%;
+        }
+    -->
+</style>
+</head>
+<body>
+
+<div id="app-1">
+    <div class="site-header">
+        <textarea id="target" v-model="result" placeholder="入力して下さい"></textarea>
+        <button type="button"
+        v-clipboard:copy="result"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError">クリップボードにコピー</button>
+    </div>
+    <div>
+        <label>散布図の一覧を表示(この文字列はヘッダーの下にあり表示されない)</label> 
+    </div>
+
+    <div v-for="(item, idx) in items" :key="idx">
+        <div>
+            <label>
+                <input type="checkbox" v-model="item.checked" @click="clicked(item)">
+                {{item.name}}
+            </label>
+            <img v-on:click="myClick(item, $event)" v-bind:src="'chart_' + item.name + '.png'" >
+        </div>
+    </div>
+</div>  <!-- {{ message }} が Vueデータに置換される -->
+
+<script>
+var app1 = new Vue({
+    el: '#app-1',                        /* #app-1 要素に対して Vue を適用する */
+    data: {
+      message: 'Hello world!',
+      items: [

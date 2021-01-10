@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Vue TEST</title>
+<!-- Vue.js を読み込む -->
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue-clipboard2@0.3.1/dist/vue-clipboard.min.js"></script>
+<style type="text/css">
+    <!--
+        .site-header{
+            position: fixed;
+            background: blue;
+            width: 100%;
+        }
+    -->
+</style>
+</head>
+<body>
+
+<div id="app-1">
+    <div class="site-header">
+        <textarea id="target" v-model="result" placeholder="入力して下さい"></textarea>
+        <button type="button"
+        v-clipboard:copy="result"
+        v-clipboard:success="onCopy"
+        v-clipboard:error="onError">クリップボードにコピー</button>
+    </div>
+    <div>
+        <label>散布図の一覧を表示(この文字列はヘッダーの下にあり表示されない)</label> 
+    </div>
+
+    <div v-for="(item, idx) in items" :key="idx">
+        <div>
+            <label>
+                <input type="checkbox" v-model="item.checked" @click="clicked(item)">
+                {{item.name}}
+            </label>
+            <img v-on:click="myClick(item, $event)" v-bind:src="'chart_' + item.name + '.png'" >
+        </div>
+    </div>
+</div>  <!-- {{ message }} が Vueデータに置換される -->
+
+<script>
+var app1 = new Vue({
+    el: '#app-1',                        /* #app-1 要素に対して Vue を適用する */
+    data: {
+      message: 'Hello world!',
+      items: [        { name: '7602', checked: false },
+        { name: '3521', checked: false },
+        { name: '9363', checked: false },
+        { name: '9827', checked: false },
+        { name: '8247', checked: false },
+        { name: '2702', checked: false },
+        { name: '7831', checked: false },
+        { name: '3237', checked: false },
+        { name: '6048', checked: false },
+        { name: '6335', checked: false },
+        { name: '3956', checked: false },
+        { name: '2673', checked: false },
+        { name: '7719', checked: false },
+        { name: '3011', checked: false },
+        { name: '2666', checked: false },
+        { name: '6819', checked: false },
+        { name: '3047', checked: false },
+        { name: '6662', checked: false },
+        { name: '3202', checked: false },
+        { name: '8912', checked: false },
+        { name: '4960', checked: false },
+        { name: '4355', checked: false },
+        { name: '1728', checked: false },
+        { name: '2499', checked: false },
+        { name: '2788', checked: false },
+        { name: '1844', checked: false },
+      ],
+      result: '',
+    },
+    methods: {
+        myClick(item, event) {
+            if(item.checked == true) {
+                item.checked = false;
+            } else {
+                item.checked = true;
+            }
+            let text = "";
+            for(let i = 0; i < this.items.length; i++) {
+                if(this.items[i].checked == true) {
+                    text = text + this.items[i].name + ",";
+                }
+                // alert("double click")
+            }
+            this.result = text.replace(/,$/g, "")
+        },
+        myClick3(item, event) {
+            if(item.checked == true) {
+                //コード削る
+                //コードの空白リプレイス
+                //,,の空白リプレイス
+                this.result = this.result.replace(item.name, "")
+                this.result = this.result.replace(/,,/g, ",")
+                this.result = this.result.replace(/^,/g, "")
+                this.result = this.result.replace(/,$/g, "")
+                item.checked = false;
+            } else {
+                item.checked = true;
+                if (this.result.length == 0){
+                    this.result = item.name;
+                } else {
+                    this.result = this.result + "," + item.name;
+                }    
+            }
+        },
+        myDblClick() {
+        alert("double click")
+        },
+        copyTextarea() {
+            //alert('テキストコピー開始')
+            const copyText = this.$el.querySelector('#target').textContent
+            navigator.clipboard
+                .writeText(copyText)
+                .then(() => {
+                    alert('テキストコピー完了')
+                })
+                .catch(e => {
+                    alert(e)
+                })
+        },
+        onCopy(e) {
+            // alert('You just copied: ' + e.text)
+        },
+        onError(e) {
+            alert('Failed to copy texts')
+        }
+    }
+})
+</script>
+
+</body>
+</html>

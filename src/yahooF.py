@@ -92,6 +92,7 @@ class TestPlanisphere:
         'FROM base  ')
 
         for row in cursor:
+            writeLOG('コード' + row[0] + ' データ取得開始')
             self.getPriceData(page, row[0])
 
         # 接続を閉じる
